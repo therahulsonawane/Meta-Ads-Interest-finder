@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0);   opacity: 0.5; }
+  50%       { transform: translateY(-5px); opacity: 1;   }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background-color: #0A0F1E;
+  color: #F1F5F9;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+
+::selection { background-color: rgba(129,140,248,0.35); color: #F8FAFC; }
+
+input::placeholder, textarea::placeholder { color: #374151; }
+
+/* Inputs get subtle focus ring via JS onFocus/onBlur or keep clean default */
+input:focus, textarea:focus {
+  border-color: rgba(129,140,248,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(129,140,248,0.08) !important;
+}
+
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1F2937; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #374151; }

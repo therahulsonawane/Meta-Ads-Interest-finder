@@ -1,16 +1,17 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 
 class RegisterRequest(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
-    password: str
+    password: str = Field(..., min_length=8, max_length=72)
 
 
 class LoginRequest(BaseModel):
     email: EmailStr
-    password: str
+    password: str = Field(..., max_length=72)
 
 
 class TokenResponse(BaseModel):
@@ -20,6 +21,7 @@ class TokenResponse(BaseModel):
 
 class UserOut(BaseModel):
     id: str
+    name: str | None
     email: str
     plan: str
     created_at: datetime

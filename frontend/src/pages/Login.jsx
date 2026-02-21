@@ -21,14 +21,14 @@ const inp = {
 export default function Login() {
   const navigate = useNavigate()
   const [mode, setMode] = useState('login') // 'login' | 'register'
-  const [form, setForm] = useState({ email: '', password: '', confirmPassword: '' })
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' })
   const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
   const switchMode = (next) => {
     setMode(next)
-    setForm({ email: '', password: '', confirmPassword: '' })
+    setForm({ name: '', email: '', password: '', confirmPassword: '' })
   }
 
   const handleSubmit = async (e) => {
@@ -36,6 +36,7 @@ export default function Login() {
     if (!form.email || !form.password) { toast.error('Please fill in all fields'); return }
 
     if (mode === 'register') {
+      if (!form.name.trim()) { toast.error('Please enter your name'); return }
       if (form.password.length < 6) { toast.error('Password must be at least 6 characters'); return }
       if (form.password !== form.confirmPassword) { toast.error('Passwords do not match'); return }
     }
@@ -46,7 +47,7 @@ export default function Login() {
       if (mode === 'login') {
         res = await loginUser({ email: form.email, password: form.password })
       } else {
-        res = await api.post('/auth/register', { email: form.email, password: form.password })
+        res = await api.post('/auth/register', { name: form.name.trim(), email: form.email, password: form.password })
       }
       localStorage.setItem('token', res.data.access_token)
       toast.success(mode === 'login' ? 'Welcome back!' : 'Account created! Welcome to AdInterest Pro 🎉')
@@ -95,9 +96,16 @@ export default function Login() {
         <div style={{ backgroundColor: '#111827', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: 32, boxShadow: '0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04)' }}>
           <form onSubmit={handleSubmit}>
 
+            {isRegister && (
+              <div style={{ marginBottom: 16 }}>
+                <label htmlFor="name" style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6B7280', marginBottom: 7, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Full Name</label>
+                <input id="name" name="name" type="text" autoComplete="name" value={form.name} onChange={handleChange} placeholder="John Doe" style={inp} />
+              </div>
+            )}
+
             <div style={{ marginBottom: 16 }}>
               <label htmlFor="email" style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#6B7280', marginBottom: 7, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Email</label>
-              <input id="email" name="email" type="email" autoComplete="email" value={form.email} onChange={handleChange} placeholder="you@company.com" style={inp} />
+              <input id="email" name="email" type="email" autoComplete="email" value={form.email} onChange={handleChange} placeholder="you@company.com" style={{ ...inp, paddingRight: 42 }} />
             </div>
 
             <div style={{ marginBottom: isRegister ? 16 : 24 }}>
